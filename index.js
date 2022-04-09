@@ -3,12 +3,12 @@ const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
-const UserModel = require("./models/User");
-const postRoute = require("./posts/posts");
+const postRoute = require("./apis/posts/posts");
 
-const userRoute = require("./users/userApi");
+const userRoute = require("./apis/users/users");
 app.use(cors());
 app.use("/uploads", express.static("uploads"));
+
 app.use(express.json());
 
 app.use("/posts", postRoute);
