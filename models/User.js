@@ -13,6 +13,8 @@ const User = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  userName: String,
+  password: String,
   dob: Date,
   title: String,
   about: String,
