@@ -20,39 +20,40 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 1024 * 1024 * 5 },
+    limits: {fileSize: 1024 * 1024 * 5},
     fileFilter: fileFilter,
 });
 
 router.get("/", async (req, res) => {
     try {
-        const users = await Users.find();
+        const users = await User.find();
         res.send(users);
     } catch (err) {
-        res.json({ message: err });
+        res.json({message: err});
     }
 });
 
 router.get("/:userId", async (req, res) => {
     try {
-        const user = await Users.findById(req.params.userId);
+        const user = await User.findById(req.params.userId);
         res.send(user);
     } catch (err) {
-        res.send({ message: err });
+        res.send({message: err});
     }
 });
 
 router.post("/", upload.single("userImage"), async (req, res) => {
     console.log(req.file);
-    const userObj=req.body;
-    userObj["userImage"]=req.file.path;
+    const userObj = req.body;
+    if (req.file)
+        userObj["userImage"] = req.file.path;
 
-    const userModal=new User(userObj)
+    const userModal = new User(userObj)
     try {
         const savedUser = await userModal.save();
         res.json(savedUser);
     } catch (err) {
-        res.json({ message: err });
+        res.json({message: err});
     }
 });
 
