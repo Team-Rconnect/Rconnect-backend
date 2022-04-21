@@ -25,6 +25,7 @@ const upload = multer({
 });
 
 router.get("/", async (req, res) => {
+    console.log("helloooo")
     try {
         const users = await User.find();
         res.send(users);
@@ -56,5 +57,20 @@ router.post("/", upload.single("userImage"), async (req, res) => {
         res.json({message: err});
     }
 });
+
+router.post("/:userId/projects",async (req,res)=>{
+    var userId = req.params.userId;
+    User.findByIdAndUpdate(
+        userId,
+        { $push: {"projects": req.body}},
+        {  safe: true, upsert: true},
+        function(err, model) {
+            if(err){
+                console.log(err);
+                return res.send(err);
+            }
+            return res.json(model);
+        });
+})
 
 module.exports = router;

@@ -46,6 +46,24 @@ const UserSchema = new mongoose.Schema({
             description: String,
         },
     ],
-    projects: [String],
+    projects: [
+        {
+            projectName:{
+                type: String,
+                required:true
+            },
+            isWorking:{
+                type: String,
+                required:true
+            },
+            startDate:{
+                type: String,
+                required:true
+            },
+            endDate:String,
+            projectUrl:String,
+            description:String
+        }
+    ],
 });
 module.exports = mongoose.model("Users", UserSchema);
