@@ -58,19 +58,110 @@ router.post("/", upload.single("userImage"), async (req, res) => {
     }
 });
 
-router.post("/:userId/projects",async (req,res)=>{
+router.post("/:userId/projects", async (req, res) => {
     var userId = req.params.userId;
     User.findByIdAndUpdate(
         userId,
-        { $push: {"projects": req.body}},
-        {  safe: true, upsert: true},
-        function(err, model) {
+        {$push: {"projects": req.body}},
+        {safe: true, upsert: true},
+        function (err, model) {
+            if (err) {
+                console.log(err);
+                return res.send(err);
+            }
+            return res.json({
+                status: true,
+                message: "successfully added project"
+            });
+        });
+})
+
+router.post("/:userId/experience", async (req, res) => {
+    var userId = req.params.userId;
+    User.findByIdAndUpdate(
+        userId,
+        {$push: {"experience": req.body}},
+        {safe: true, upsert: true},
+        function (err, model) {
+            if (err) {
+                console.log(err);
+                return res.send(err);
+            }
+            return res.json({
+                status: true,
+                message: "successfully added experience"
+            });
+        });
+})
+
+router.post("/:userId/education", async (req, res) => {
+    var userId = req.params.userId;
+    User.findByIdAndUpdate(
+        userId,
+        {$push: {"education": req.body}},
+        {safe: true, upsert: true},
+        function (err, model) {
+            if (err) {
+                console.log(err);
+                return res.send(err);
+            }
+            return res.json({
+                status: true,
+                message: "successfully added education"
+            });
+        });
+})
+
+router.delete("/:userId/projects/:projectId", async (req, res) => {
+
+    var userId = req.params.userId
+    var projectId=req.params.projectId
+    User.findByIdAndUpdate(
+        userId,
+        { $pull: { 'projects': {  _id: projectId } } },function(err,model){
             if(err){
                 console.log(err);
                 return res.send(err);
             }
-            return res.json(model);
+            return res.json({
+                status:true,
+                message:"successfully deleted project"
+            });
+        });
+})
+router.delete("/:userId/education/:educationId", async (req, res) => {
+
+    var userId = req.params.userId
+    var educationId=req.params.educationId
+    User.findByIdAndUpdate(
+        userId,
+        { $pull: { 'education': {  _id: educationId } } },function(err,model){
+            if(err){
+                console.log(err);
+                return res.send(err);
+            }
+            return res.json({
+                status:true,
+                message:"successfully deleted education"
+            });
         });
 })
 
+router.delete("/:userId/experience/:experienceId", async (req, res) => {
+
+    var userId = req.params.userId
+    var experienceId=req.params.experienceId
+    User.findByIdAndUpdate(
+        userId,
+        { $pull: { 'experience': {  _id: experienceId } } },function(err,model){
+            if(err){
+                console.log(err);
+                return res.send(err);
+            }
+            return res.json({
+                status:true,
+                message:"successfully deleted experience"
+            });
+        });
+})
 module.exports = router;

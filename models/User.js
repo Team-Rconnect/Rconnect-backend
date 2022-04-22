@@ -17,13 +17,13 @@ const UserSchema = new mongoose.Schema({
     userName: {
         type: String,
         min: 6,
-        required:true
+        required: true
     },
     email: String,
     password: {
         type: String,
         min: 6,
-        required:true
+        required: true
     },
     userImage: String,
     dob: Date,
@@ -32,37 +32,50 @@ const UserSchema = new mongoose.Schema({
     skills: [String],
     experience: [
         {
-            from: Date,
-            to: Date,
-            organization: String,
-            description: String,
+            title: String,
+            employementType: String,
+            companyName: String,
+            location: String,
+            isWorking: Boolean,
+            startDate: {
+                type: String,
+                required: true
+            },
+            endDate: String,
+            description: String
         },
     ],
     education: [
         {
-            from: Date,
-            to: Date,
-            university: String,
-            description: String,
+            college: String,
+            degree: String,
+            fieldOfStudy: String,
+            startDate: {
+                type: String,
+                required: true
+            },
+            endDate: String,
+            grade: Number,
+            description: String
         },
     ],
     projects: [
         {
-            projectName:{
+            projectName: {
                 type: String,
-                required:true
+                required: true
             },
-            isWorking:{
+            isWorking: {
                 type: String,
-                required:true
+                required: true
             },
-            startDate:{
+            startDate: {
                 type: String,
-                required:true
+                required: true
             },
-            endDate:String,
-            projectUrl:String,
-            description:String
+            endDate: String,
+            projectUrl: String,
+            description: String
         }
     ],
 });
