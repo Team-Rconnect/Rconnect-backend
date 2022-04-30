@@ -75,7 +75,43 @@ router.post("/:userId/projects", async (req, res) => {
             });
         });
 })
+//change about,fname,lname etc...
+router.post("/:userId/change", async (req, res) => {
+    var userId = req.params.userId;
+    console.log("how are you")
+    User.findOneAndUpdate({_id: userId},
+        {$set: req.body}, {safe: true, upsert: true},
+        function (err, model) {
+            if (err) {
+                console.log(err);
+                return res.send(err);
+            }
+            return res.json({
+                status: true,
+                message: "successfully changed"
+            });
+        })
+})
 
+//update a experience
+router.post("/update/:userId/experience/:experienceId", async (req, res) => {
+    console.log("in update experience method")
+    var userId = req.params.userId
+    var experienceId = req.params.experienceId
+    User.findOneAndUpdate({_id: userId, experience: {$elemMatch: {_id: experienceId}}},
+        {$set: req.body},
+        {'new': true, 'safe': true, 'upsert': true},
+        function (err, model) {
+            if (err) {
+                console.log(err);
+                return res.send(err);
+            }
+            return res.json({
+                status: true,
+                message: "successfully updated experience"
+            })
+        })
+})
 router.post("/:userId/experience", async (req, res) => {
     var userId = req.params.userId;
     User.findByIdAndUpdate(
@@ -115,52 +151,52 @@ router.post("/:userId/education", async (req, res) => {
 router.delete("/:userId/projects/:projectId", async (req, res) => {
 
     var userId = req.params.userId
-    var projectId=req.params.projectId
+    var projectId = req.params.projectId
     User.findByIdAndUpdate(
         userId,
-        { $pull: { 'projects': {  _id: projectId } } },function(err,model){
-            if(err){
+        {$pull: {'projects': {_id: projectId}}}, function (err, model) {
+            if (err) {
                 console.log(err);
                 return res.send(err);
             }
             return res.json({
-                status:true,
-                message:"successfully deleted project"
+                status: true,
+                message: "successfully deleted project"
             });
         });
 })
 router.delete("/:userId/education/:educationId", async (req, res) => {
 
     var userId = req.params.userId
-    var educationId=req.params.educationId
+    var educationId = req.params.educationId
     User.findByIdAndUpdate(
         userId,
-        { $pull: { 'education': {  _id: educationId } } },function(err,model){
-            if(err){
+        {$pull: {'education': {_id: educationId}}}, function (err, model) {
+            if (err) {
                 console.log(err);
                 return res.send(err);
             }
             return res.json({
-                status:true,
-                message:"successfully deleted education"
+                status: true,
+                message: "successfully deleted education"
             });
         });
 })
 
-router.delete("/:userId/experience/:experienceId", async (req, res) => {
 
+router.delete("/:userId/experience/:experienceId", async (req, res) => {
     var userId = req.params.userId
-    var experienceId=req.params.experienceId
+    var experienceId = req.params.experienceId
     User.findByIdAndUpdate(
         userId,
-        { $pull: { 'experience': {  _id: experienceId } } },function(err,model){
-            if(err){
+        {$pull: {'experience': {_id: experienceId}}}, function (err, model) {
+            if (err) {
                 console.log(err);
                 return res.send(err);
             }
             return res.json({
-                status:true,
-                message:"successfully deleted experience"
+                status: true,
+                message: "successfully deleted experience"
             });
         });
 })
