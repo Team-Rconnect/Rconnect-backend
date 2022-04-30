@@ -2,6 +2,7 @@ const express = require("express");
 const User = require("../../models/User");
 const router = express.Router();
 const multer = require("multer");
+const {use} = require("express/lib/router");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -98,8 +99,10 @@ router.post("/update/:userId/experience/:experienceId", async (req, res) => {
     console.log("in update experience method")
     var userId = req.params.userId
     var experienceId = req.params.experienceId
-    User.findOneAndUpdate({_id: userId, experience: {$elemMatch: {_id: experienceId}}},
-        {$set: req.body},
+    User.findOneAndUpdate   ( {'_id':userId,'experience._id': experienceId},
+        {$set:  {
+                "experience.$.title": "wxyz"
+            }},
         {'new': true, 'safe': true, 'upsert': true},
         function (err, model) {
             if (err) {
