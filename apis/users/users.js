@@ -26,7 +26,6 @@ const upload = multer({
 });
 
 router.get("/", async (req, res) => {
-    console.log("helloooo")
     try {
         const users = await User.find();
         res.send(users);
@@ -76,10 +75,26 @@ router.post("/:userId/projects", async (req, res) => {
             });
         });
 })
+router.post("/:userId/projects", async (req, res) => {
+    var userId = req.params.userId;
+    User.findByIdAndUpdate(
+        userId,
+        {$push: {"projects": req.body}},
+        {safe: true, upsert: true},
+        function (err, model) {
+            if (err) {
+                console.log(err);
+                return res.send(err);
+            }
+            return res.json({
+                status: true,
+                message: "successfully added project"
+            });
+        });
+})
 //change about,fname,lname etc...
 router.post("/:userId/change", async (req, res) => {
     var userId = req.params.userId;
-    console.log("how are you")
     User.findOneAndUpdate({_id: userId},
         {$set: req.body}, {safe: true, upsert: true},
         function (err, model) {
@@ -96,7 +111,6 @@ router.post("/:userId/change", async (req, res) => {
 
 //update a experience
 router.post("/update/:userId/experience/:experienceId", async (req, res) => {
-    console.log("in update experience method")
     var userId = req.params.userId
     var experienceId = req.params.experienceId
     User.findOneAndUpdate   ( {'_id':userId,'experience._id': experienceId},
@@ -202,5 +216,24 @@ router.delete("/:userId/experience/:experienceId", async (req, res) => {
                 message: "successfully deleted experience"
             });
         });
+})
+
+router.post("/:userId/skills",async  (req,res)=>{
+    var userId=req.params.userId
+
+    User.findByIdAndUpdate(userId,
+        {$set:req.body},
+        {safe: true, upsert: true},
+        function (err, model) {
+            if (err) {
+                console.log(err);
+                return res.send(err);
+            }
+            return res.json({
+                status: true,
+                message: "successfully added project"
+            });
+        }
+        )
 })
 module.exports = router;
