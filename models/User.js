@@ -4,7 +4,6 @@ const UserSchema = new mongoose.Schema({
     firstName: {
         type: String,
         required: true,
-
     },
     lastName: {
         type: String,
@@ -78,14 +77,14 @@ const UserSchema = new mongoose.Schema({
             description: String
         }
     ],
-    branch:{
-        type:String,
+    branch: {
+        type: String,
     },
-    year:{
-        type:String,
+    year: {
+        type: String,
     },
-    gender:{
-        type:String
+    gender: {
+        type: String
     }
 });
 module.exports = mongoose.model("Users", UserSchema);
