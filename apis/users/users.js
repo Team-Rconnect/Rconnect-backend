@@ -26,6 +26,7 @@ const upload = multer({
 });
 
 router.get("/", async (req, res) => {
+    console.log("hellooooo")
     try {
         const users = await User.find();
         res.send(users);
@@ -109,14 +110,65 @@ router.post("/:userId/change", async (req, res) => {
         })
 })
 
-//update a experience
+//update  experience
 router.post("/update/:userId/experience/:experienceId", async (req, res) => {
     var userId = req.params.userId
     var experienceId = req.params.experienceId
-    User.findOneAndUpdate   ( {'_id':userId,'experience._id': experienceId},
-        {$set:  {
-                "experience.$.title": "wxyz"
-            }},
+    var body = req.body
+    var passedObject = {}
+    for (const [key, value] of Object.entries(body)) {
+        passedObject[`experience.$.${key}`] = value
+    }
+    User.findOneAndUpdate({'_id': userId, 'experience._id': experienceId},
+        {$set: passedObject},
+        {'new': true, 'safe': true, 'upsert': true},
+        function (err, model) {
+            if (err) {
+                console.log(err);
+                return res.send(err);
+            }
+            return res.json({
+                status: true,
+                message: "successfully updated experience"
+            })
+        })
+})
+
+//update project
+router.post("/update/:userId/project/:projectId", async (req, res) => {
+    var userId = req.params.userId
+    var projectId = req.params.projectId
+    var body = req.body
+    var passedObject = {}
+    for (const [key, value] of Object.entries(body)) {
+        passedObject[`project.$.${key}`] = value
+    }
+    User.findOneAndUpdate({'_id': userId, 'project._id': projectId},
+        {$set: passedObject},
+        {'new': true, 'safe': true, 'upsert': true},
+        function (err, model) {
+            if (err) {
+                console.log(err);
+                return res.send(err);
+            }
+            return res.json({
+                status: true,
+                message: "successfully updated experience"
+            })
+        })
+})
+
+//update education
+router.post("/update/:userId/education/:educationId", async (req, res) => {
+    var userId = req.params.userId
+    var educationId = req.params.educationId
+    var body = req.body
+    var passedObject = {}
+    for (const [key, value] of Object.entries(body)) {
+        passedObject[`education.$.${key}`] = value
+    }
+    User.findOneAndUpdate({'_id': userId, 'education._id': educationId},
+        {$set: passedObject},
         {'new': true, 'safe': true, 'upsert': true},
         function (err, model) {
             if (err) {
@@ -218,11 +270,11 @@ router.delete("/:userId/experience/:experienceId", async (req, res) => {
         });
 })
 
-router.post("/:userId/skills",async  (req,res)=>{
-    var userId=req.params.userId
+router.post("/:userId/skills", async (req, res) => {
+    var userId = req.params.userId
 
     User.findByIdAndUpdate(userId,
-        {$set:req.body},
+        {$set: req.body},
         {safe: true, upsert: true},
         function (err, model) {
             if (err) {
@@ -234,6 +286,6 @@ router.post("/:userId/skills",async  (req,res)=>{
                 message: "successfully added project"
             });
         }
-        )
+    )
 })
 module.exports = router;
