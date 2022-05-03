@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
         cb(null, "./uploads/");
     },
     filename: (req, file, cb) => {
-        cb(null, new Date().toISOString() + file.originalname);
+        cb(null, file.originalname);
     },
 });
 
@@ -26,7 +26,6 @@ const upload = multer({
 });
 
 router.get("/", async (req, res) => {
-    console.log("hellooooo")
     try {
         const users = await User.find();
         res.send(users);
